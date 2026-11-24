@@ -1,0 +1,29 @@
+.stats-card {
+  background: rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  padding: 15px;
+  display: flex;
+  align-items: center;
+  margin: 10px;
+  flex: 1;
+  height: 200px;
+}
+
+.stats-icon {
+  font-size: 50px;
+  margin-right: 10px;
+}
+
+.stats-info h3 {
+  margin: 0;
+  font-size: 40px;
+}
+
+.stats-info p {
+  margin: 0;
+  font-size: 20px;
+}
