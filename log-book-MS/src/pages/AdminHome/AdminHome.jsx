@@ -3,6 +3,7 @@ import StatusCard from "../../components/StatusCard/StatusCard";
 import "./AdminHome.css";
 import Loader from "../../components/Loader/Loader";
 import { useAppContext } from "../../app/useAppContext";
+import { API_URL } from "../../utils/api";
 import {
   FaCheckCircle,
   FaFileAlt,
@@ -23,7 +24,7 @@ function AdminHome() {
 
         //* Sum of all logbooks
         const response = await fetch(
-          "http://localhost:8000/api/logbooks/admin/logbooks/total",
+          `${API_URL}/api/logbooks/admin/logbooks/total`,
           {
             method: "GET",
             headers: {
@@ -37,7 +38,7 @@ function AdminHome() {
 
         //* Sum of all unapproved logbooks
         const response2 = await fetch(
-          "http://localhost:8000/api/logbooks/admin/logbooks/unapproved",
+          `${API_URL}/api/logbooks/admin/logbooks/unapproved`,
           {
             method: "GET",
             headers: {
@@ -51,7 +52,7 @@ function AdminHome() {
 
         //* Sum of all approved logbooks
         const response3 = await fetch(
-          "http://localhost:8000/api/logbooks/admin/logbooks/approved",
+          `${API_URL}/api/logbooks/admin/logbooks/approved`,
           {
             method: "GET",
             headers: {

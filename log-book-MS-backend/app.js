@@ -9,8 +9,32 @@ const userRouter = require("./routes/userRoutes/userRoutes");
 const app = express();
 
 app.use(express.json());
-app.use(cors());
 app.use(morgan("dev"));
+
+const configuredOrigins = (process.env.CORS_ORIGINS || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin) {
+        return callback(null, true);
+      }
+
+      if (
+        configuredOrigins.includes(origin) ||
+        (!process.env.CORS_ORIGINS &&
+          /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin))
+      ) {
+        return callback(null, true);
+      }
+
+      return callback(new Error("Origin not allowed by CORS"));
+    },
+  })
+);
 
 //* Routes
 app.use("/api/daily-logs", dailyLogRouter);
@@ -31,7 +55,8 @@ app.use((error, req, res, next) => {
   });
 });
 
-//*listen for incoming requests
-app.listen(8000, () => {
-  console.log("Listening on port 8000");
+//* Listen for incoming requests
+const port = process.env.PORT || 8000;
+app.listen(port, () => {
+  console.log(`Listening on port ${port}`);
 });

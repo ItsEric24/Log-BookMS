@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { ToastContainer, toast } from "react-toastify";
 import { useAppContext } from "../../app/useAppContext";
+import { API_URL } from "../../utils/api";
 
 function AdminLogbookView() {
   const [logbook, setLogbook] = useState({});
@@ -23,7 +24,7 @@ function AdminLogbookView() {
     const fetchLogbook = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/logbooks/logbook/${id}`,
+          `${API_URL}/api/logbooks/logbook/${id}`,
           {
             method: "GET",
             headers: {
@@ -53,7 +54,7 @@ function AdminLogbookView() {
       return toast.error("Please check your phone number");
     }
     const response = await fetch(
-      `http://localhost:8000/api/logbooks/admin/logbook/approve/${id}`,
+      `${API_URL}/api/logbooks/admin/logbook/approve/${id}`,
       {
         method: "PUT",
         headers: {
@@ -106,7 +107,7 @@ function AdminLogbookView() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/logbooks/admin/logbook/comments/${id}`,
+        `${API_URL}/api/logbooks/admin/logbook/comments/${id}`,
         {
           method: "PUT",
           headers: {
@@ -152,7 +153,7 @@ function AdminLogbookView() {
 
     try {
       const response = await fetch(
-        `http://localhost:8000/api/logbooks/admin/logbook/signedby/${id}`,
+        `${API_URL}/api/logbooks/admin/logbook/signedby/${id}`,
         {
           method: "PUT",
           headers: {
@@ -190,7 +191,7 @@ function AdminLogbookView() {
     }
     try {
       const response = await fetch(
-        `http://localhost:8000/api/logbooks/admin/logbook/supervisor-phone/${id}`,
+        `${API_URL}/api/logbooks/admin/logbook/supervisor-phone/${id}`,
         {
           method: "PUT",
           headers: {

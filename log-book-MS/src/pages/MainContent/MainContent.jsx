@@ -3,6 +3,7 @@ import StatusCard from "../../components/StatusCard/StatusCard"
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader/Loader"
 import { useAppContext } from "../../app/useAppContext";
+import { API_URL } from "../../utils/api";
 import {
   FaCheckCircle,
   FaFileAlt,
@@ -22,7 +23,7 @@ function MainContent() {
       try {
 
         //* Sum all logbooks for a particular student
-        const response = await fetch(`http://localhost:8000/api/logbooks/total/${user.id}`, {
+        const response = await fetch(`${API_URL}/api/logbooks/total/${user.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -31,7 +32,7 @@ function MainContent() {
         setLogbookSum(data.data[0].count);
 
         //* Sum all approved logbooks for a particular student
-        const response2 = await fetch(`http://localhost:8000/api/logbooks/approved/${user.id}`, {
+        const response2 = await fetch(`${API_URL}/api/logbooks/approved/${user.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -40,7 +41,7 @@ function MainContent() {
         setApprovedLogbookSum(data2.data[0].count);
 
         //* Sum all unapproved logbooks for a particular student
-        const response3 = await fetch(`http://localhost:8000/api/logbooks/unapproved/${user.id}`, {
+        const response3 = await fetch(`${API_URL}/api/logbooks/unapproved/${user.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

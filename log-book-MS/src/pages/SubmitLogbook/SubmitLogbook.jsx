@@ -3,6 +3,7 @@ import "./SubmitLogbook.css";
 import { ToastContainer, toast } from "react-toastify";
 import { sendEmail } from "../../utils/helperFunc";
 import { useAppContext } from "../../app/useAppContext";
+import { API_URL } from "../../utils/api";
 
 function SubmitLogbook() {
   const { dailyLogs, fetchDailyLogs, token, user } = useAppContext();
@@ -45,7 +46,7 @@ LogBookMS`;
       return toast.error("There are no daily logs for this week");
     }
 
-    const response = await fetch("http://localhost:8000/api/logbooks/add", {
+    const response = await fetch(`${API_URL}/api/logbooks/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

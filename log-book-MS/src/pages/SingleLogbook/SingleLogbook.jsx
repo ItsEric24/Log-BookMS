@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import DeleteModal from "../../components/DeleteModal/DeleteModal";
 import { ToastContainer, toast } from "react-toastify";
 import { useAppContext } from "../../app/useAppContext";
+import { API_URL } from "../../utils/api";
 
 function SingleLogbook() {
   const [logbook, setLogbook] = useState({});
@@ -17,7 +18,7 @@ function SingleLogbook() {
     const fetchlogbook = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/logbooks/logbook/${id}`,
+          `${API_URL}/api/logbooks/logbook/${id}`,
           {
             method: "GET",
             headers: {
@@ -43,7 +44,7 @@ function SingleLogbook() {
   async function handleDelete() {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/logbooks/logbook/${id}`,
+        `${API_URL}/api/logbooks/logbook/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -79,7 +80,7 @@ function SingleLogbook() {
   async function generatePDF() {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/logbooks/logbook/pdf/${id}`,
+        `${API_URL}/api/logbooks/logbook/pdf/${id}`,
         {
           method: "GET",
           headers: {

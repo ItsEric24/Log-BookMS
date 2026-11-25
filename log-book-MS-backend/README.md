@@ -81,7 +81,8 @@ npm install
 Create a `.env` file in the project root with the following variables:
 
 ```env
-# PostgreSQL
+# PostgreSQL: use DATABASE_URL for Neon, or the DB_* values for local PostgreSQL.
+DATABASE_URL=
 DB_HOST=localhost
 DB_USER=postgres
 DB_PORT=5432
@@ -106,6 +107,20 @@ CREATE DATABASE "logbookMS";
 ```
 
 Then create the required tables (see [Database Schema](#database-schema) below for the full DDL).
+
+### Seed demo data
+
+After creating the schema, set `DATABASE_URL` to the Neon connection string (or configure the local `DB_*` values), and add these variables to `.env`:
+
+```env
+SEED_DEMO_DATA=true
+DEMO_STUDENT_PASSWORD=<a-unique-password-at-least-12-characters>
+DEMO_SUPERVISOR_PASSWORD=<a-different-unique-password-at-least-12-characters>
+```
+
+Run `npm run seed:demo` to create the demo student and supervisor accounts, ten daily logs, one approved logbook, and one pending logbook. The login emails are `student.demo@logbookms.test` and `supervisor.demo@logbookms.test`. For both accounts, select **Infrastructure** and **KCA** in the login form.
+
+The command is opt-in and repeatable. Re-running it resets logbooks and daily logs belonging to the reserved demo student account and resets both demo account passwords. Do not use these accounts for real users or seed a database containing real records.
 
 ### Running the Server
 

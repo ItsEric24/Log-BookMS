@@ -6,6 +6,7 @@ import { ToastContainer, toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import DailyModal from "../../components/DailyModal/DailyModal";
 import { useAppContext } from "../../app/useAppContext";
+import { API_URL } from "../../utils/api";
 
 function SingleDailyLog() {
   const [dailyLog, setDailylog] = useState({});
@@ -20,7 +21,7 @@ function SingleDailyLog() {
     const fetchLog = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8000/api/daily-logs/daily-log/${id}`,
+          `${API_URL}/api/daily-logs/daily-log/${id}`,
           {
             headers: {
               "Content-Type": "application/json",
@@ -44,7 +45,7 @@ function SingleDailyLog() {
   const handleDelete = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/daily-logs/${id}`,
+        `${API_URL}/api/daily-logs/${id}`,
         {
           method: "DELETE",
           headers: {
@@ -82,7 +83,7 @@ function SingleDailyLog() {
   const handleSave = async (updatedData) => {
     try {
       const response = await fetch(
-        `http://localhost:8000/api/daily-logs/${id}`,
+        `${API_URL}/api/daily-logs/${id}`,
         {
           method: "PUT",
           headers: {

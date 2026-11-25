@@ -1,7 +1,8 @@
-/* eslint-disable no-unused-vars */
+import { API_URL } from "./api";
+
 export const sendEmail = async (subject, text, token) => {
   try {
-    const response = await fetch("http://localhost:8000/api/logbooks/send-email", {
+    await fetch(`${API_URL}/api/logbooks/send-email`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

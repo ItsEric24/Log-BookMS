@@ -442,7 +442,11 @@ pnpm dev
 
 The UI is available at `http://localhost:3000`.
 
-The frontend currently hard-codes `http://localhost:8000` in API calls, so no frontend environment variable is required for the local setup.
+Create `log-book-MS/.env` from `.env.example` when a local or hosted API URL is needed:
+
+```env
+VITE_API_URL=http://localhost:8000
+```
 
 ### Backend
 
@@ -454,7 +458,7 @@ npm install
 npm start
 ```
 
-`npm start` invokes Nodemon and starts the API on `http://localhost:8000`.
+`npm run dev` invokes Nodemon and starts the API on `http://localhost:8000`. `npm start` runs the production-compatible Node server.
 
 Create `log-book-MS-backend/.env` with:
 
@@ -467,11 +471,48 @@ DB_NAME=logbookMS
 
 JWT_SECRET=<a-long-random-secret>
 
+CORS_ORIGINS=http://localhost:3000
+
 EMAIL=<gmail-address>
 EMAIL_PASSWORD=<gmail-app-password>
+SUPERVISOR_EMAIL=<supervisor-email>
 ```
 
 PostgreSQL must contain the `members`, `daily_logs`, and `logbooks` tables and suitable UUID defaults/foreign keys. Database setup details and reconstruction SQL are documented in `DATABASE_SCHEMA.md`.
+
+### MVP deployment
+
+The repository includes `vercel.json` for the frontend and `render.yaml` for the backend. Neon provides the PostgreSQL database.
+
+#### Frontend on Vercel
+
+1. Import the repository into Vercel.
+2. Set the project root directory to `log-book-MS`.
+3. Set `VITE_API_URL` to the deployed Render API URL, for example `https://log-book-ms-api.onrender.com`.
+4. Deploy. Vercel serves the Vite build and the included rewrite supports React Router routes.
+
+#### Backend on Render
+
+1. Create a Neon project and database. Copy its pooled connection string.
+2. Create a Render Blueprint from the repository root using `render.yaml`.
+3. Set `DATABASE_URL` in Render to the Neon connection string and `CORS_ORIGINS` to the exact Vercel frontend origin, for example `https://your-project.vercel.app`.
+4. Apply the required schema in `log-book-MS-backend/DATABASE_SCHEMA.md` to the Neon database using Neon's SQL Editor. The documented DDL is reconstructed from the application and should be checked against the actual schema before applying it to an existing database.
+5. Set `EMAIL`, `EMAIL_PASSWORD`, and `SUPERVISOR_EMAIL` only if the email feature will be demonstrated.
+
+#### Seed showcase accounts and records
+
+The backend has an opt-in seed command that creates one demo student, one demo supervisor, five daily entries in each of two previous weeks, one approved logbook, and one pending logbook. It uses reserved `.test` email addresses and hashes the passwords.
+
+1. In `log-book-MS-backend/.env`, set `DATABASE_URL` to the Neon connection string and provide `SEED_DEMO_DATA=true`, `DEMO_STUDENT_PASSWORD`, and `DEMO_SUPERVISOR_PASSWORD`. Use separate demo passwords of at least 12 characters. This local `.env` file is git-ignored.
+2. From the backend folder, run:
+
+   ```bash
+   npm run seed:demo
+   ```
+
+3. Log in using `student.demo@logbookms.test` or `supervisor.demo@logbookms.test` and the respective passwords you configured. For both accounts, select **Infrastructure** and **KCA** in the login form.
+
+Re-running the command resets daily logs and logbooks belonging to the reserved demo student and refreshes the demo account passwords. Do not use these reserved demo accounts for real users or seed a database containing real records.
 
 ## Development commands
 
@@ -489,7 +530,8 @@ pnpm preview  # Preview a built bundle
 
 ```bash
 cd log-book-MS-backend
-npm start     # Nodemon development server
+npm run dev   # Nodemon development server
+npm start     # Production-compatible Node server
 npm test      # Placeholder; no test runner is configured
 ```
 
