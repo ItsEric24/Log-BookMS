@@ -94,6 +94,7 @@ JWT_SECRET=your_jwt_secret_key
 # Email (optional — required only for email feature)
 EMAIL=your_gmail@gmail.com
 EMAIL_PASSWORD=your_gmail_app_password
+SUPERVISOR_EMAIL=supervisor@example.com
 ```
 
 ### Database Setup
@@ -343,6 +344,7 @@ log-book-MS-backend/
 | `JWT_SECRET`     | Yes      | Secret key for signing JWT tokens          |
 | `EMAIL`          | No       | Gmail address for Nodemailer               |
 | `EMAIL_PASSWORD` | No       | Gmail App Password for Nodemailer          |
+| `SUPERVISOR_EMAIL` | No     | Recipient for student logbook submissions  |
 
 ---
 

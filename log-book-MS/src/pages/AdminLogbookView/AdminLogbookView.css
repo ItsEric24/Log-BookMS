@@ -1,11 +1,13 @@
 /* AdminLogbook.css */
 .admin-logbook-document {
-  width: 900px;
-  margin: 50px auto;
-  background-color: #ebe9e9;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #eeefed;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px rgba(28, 35, 32, 0.035);
 }
 
 .admin-logbook-header {
@@ -30,14 +32,14 @@
 .admin-daily-logs h2 {
   font-size: 20px;
   margin-bottom: 10px;
-  color: #444;
+  color: #33343a;
 }
 
 .admin-daily-log {
   margin-bottom: 15px;
   padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+  border: 1px solid #eeefed;
+  border-radius: 10px;
   background-color: #fff;
 }
 
@@ -92,7 +94,7 @@
 }
 
 .admin-approve-button {
-  background-color: #28a745; /* Green */
+  background-color: #33896f;
 }
 
 .admin-approve-button:disabled{
@@ -100,13 +102,19 @@
 }
 
 .admin-approve-button:hover {
-  background-color: #218838;
+  background-color: #26765e;
 }
 
 .admin-sign-button {
-  background-color: #007bff; /* Blue */
+  background-color: #33896f;
 }
 
 .admin-sign-button:hover {
-  background-color: #0056b3;
+  background-color: #26765e;
+}
+
+@media (max-width: 700px) {
+  .admin-logbook-document {
+    padding: 18px;
+  }
 }

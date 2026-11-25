@@ -101,12 +101,12 @@ function DailyLogs() {
                 </div>
               ))
           ) : (
-            <p style={{ color: "#ffffff", textAlign: "center" }}>
+            <p className="empty-state">
               No logs for this week
             </p>
           )
         ) : (
-          <p style={{ color: "#ffffff", textAlign: "center" }}>
+          <p className="empty-state">
             No daily logs available, create one to get started.
           </p>
         )}

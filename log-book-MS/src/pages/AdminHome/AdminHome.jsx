@@ -3,6 +3,11 @@ import StatusCard from "../../components/StatusCard/StatusCard";
 import "./AdminHome.css";
 import Loader from "../../components/Loader/Loader";
 import { useAppContext } from "../../app/useAppContext";
+import {
+  FaCheckCircle,
+  FaFileAlt,
+  FaHourglassHalf,
+} from "react-icons/fa";
 
 function AdminHome() {
   const { token } = useAppContext();
@@ -69,10 +74,9 @@ function AdminHome() {
 
   return (
     <div className="admin-main-content">
-      <StatusCard title="Total Submissions" value={loading ? <Loader /> : sumOfLogbooks} icon="📄" />
-      <StatusCard title="Pending Reviews" value={loading ? <Loader /> : sumOfUnapprovedLogs} icon="⏳" />
-      <StatusCard title="Approved Logs" value={loading ? <Loader /> : sumOfApprovedLogs} icon="✅" />
-      <StatusCard title="Rejected Logs" value="0" icon="❌" />
+      <StatusCard title="Total Submissions" value={loading ? <Loader /> : sumOfLogbooks} icon={<FaFileAlt />} />
+      <StatusCard title="Pending Reviews" value={loading ? <Loader /> : sumOfUnapprovedLogs} icon={<FaHourglassHalf />} />
+      <StatusCard title="Approved Logs" value={loading ? <Loader /> : sumOfApprovedLogs} icon={<FaCheckCircle />} />
     </div>
   );
 }

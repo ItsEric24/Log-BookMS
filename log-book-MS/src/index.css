@@ -1,11 +1,43 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-*{
-    font-family: "Inter", sans-serif;
-    box-sizing: border-box;
+* {
+  font-family: "Inter", sans-serif;
+  box-sizing: border-box;
 }
 
-body{
-    margin: 0;
-    padding: 0;
+html,
+body,
+#root {
+  min-height: 100%;
+  margin: 0;
+}
+
+body {
+  padding: 0;
+  background: #f4f5f4;
+  color: #28292f;
+  font-size: 14px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid rgba(51, 137, 111, 0.3);
+  outline-offset: 2px;
+}
+
+.empty-state {
+  margin: 18px 0;
+  color: #858890;
+  font-size: 13px;
+  text-align: center;
 }

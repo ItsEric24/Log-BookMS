@@ -3,6 +3,11 @@ import StatusCard from "../../components/StatusCard/StatusCard"
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader/Loader"
 import { useAppContext } from "../../app/useAppContext";
+import {
+  FaCheckCircle,
+  FaFileAlt,
+  FaHourglassHalf,
+} from "react-icons/fa";
 
 function MainContent() {
   const { token, user } = useAppContext();
@@ -55,10 +60,9 @@ function MainContent() {
 
   return (
     <div className="main-content">
-        <StatusCard title="Total Submissions" value={loading ? <Loader /> : logbookSum} icon="📄" />
-        <StatusCard title="Pending Reviews" value={loading ? <Loader /> : unapprovedLogbookSum} icon="⏳" />
-        <StatusCard title="Approved Logs" value={loading ? <Loader /> : approvedLogbookSum} icon="✅" />
-        <StatusCard title="Rejected Logs" value="0" icon="❌" />
+        <StatusCard title="Total Submissions" value={loading ? <Loader /> : logbookSum} icon={<FaFileAlt />} />
+        <StatusCard title="Pending Reviews" value={loading ? <Loader /> : unapprovedLogbookSum} icon={<FaHourglassHalf />} />
+        <StatusCard title="Approved Logs" value={loading ? <Loader /> : approvedLogbookSum} icon={<FaCheckCircle />} />
     </div>
   );
 }

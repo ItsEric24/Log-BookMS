@@ -7,6 +7,10 @@ Log-BookMS is a full-stack academic and internship log-book application split in
 1. **`log-book-MS/`** is the React user interface.
 2. **`log-book-MS-backend/`** is the Express and PostgreSQL REST API.
 
+### Motivation
+
+The motivation for this project came from seeing that schools in Kenya still handle logbook processes with physical paper. This project explores how to automate that process with a system that makes logging, reviewing, approving, and managing academic or internship logbooks faster and more accessible.
+
 Students use the system to:
 
 - Register and log in.
@@ -502,32 +506,28 @@ The backend has no automated test suite and no test script beyond the package-ge
 
 ## Current implementation notes and gaps
 
-These details are useful for maintainers and should not be mistaken for intentional security guarantees:
+The main implementation gaps listed previously have been addressed:
 
-- The frontend uses `localStorage` for authentication; tokens and users are browser-visible.
-- `authenticateUser` assumes an authorization header exists and would otherwise throw before its explicit missing-token check.
-- Login requires a school input, but the backend login query does not use the submitted `school`.
-- Daily and logbook mutations are not awaited in all SQL route handlers, so some success responses may be sent before database operations finish.
-- Some routes validate UUIDs while count and student routes do not.
-- Routes do not consistently verify that a student owns the record they request, update, or delete.
-- The backend has no catch-all 404 or centralized error middleware.
-- The frontend PDF button is disabled only when `logbook.is_approved === null`; because normal pending values are `false`, it can appear enabled for pending records.
-- The approval page redirects to `/dashboard/logbooks` after supervisor approval, although a supervisor should more naturally return to `/admin/logbooks`.
-- The login page automatically redirects any token to `/dashboard`; `/dashboard` then redirects a supervisor to `/admin`.
-- `src/app/App.jsx` is an unused prototype and calls an endpoint not defined by the backend.
-- `src/utils/data.js` and `ApproveModal.jsx` are retained demo/legacy code and are not needed for the active data flow.
-- `src/App.css` is effectively unused; active styles are colocated with each component/page.
-- The email recipient and sender are hard-coded in `SubmitLogbook.jsx` and are not derived from a supervisor record.
-- Rejected-log counts are always rendered as `0`; there is no rejection field or rejection-status API.
-- The project does not have migrations or seed scripts; schema setup is manual.
-- There are no automated frontend or backend tests.
+- Authentication now validates a missing or malformed `Bearer` header safely.
+- Login checks email, password, department, and school together.
+- Registration, login, CRUD, and mutation SQL operations are awaited before success responses.
+- Student and logbook routes enforce owner/staff authorization and validate relevant UUID parameters.
+- The backend has a catch-all API 404 and centralized error middleware.
+- Pending logbooks now disable PDF generation until `is_approved === true`.
+- PDF export is also blocked server-side for unapproved logbooks.
+- Supervisor approval returns to `/admin/logbooks`.
+- Login redirects supervisors and students to their appropriate dashboards.
+- Submission email sender/recipient values now come from `EMAIL` and `SUPERVISOR_EMAIL` environment variables.
+- Duplicate daily logs and duplicate weekly logbooks are rejected.
+- Misleading hard-coded rejected-log cards have been removed because the schema has no rejection status.
 
-## Security guidance before production
+Remaining work:
 
-Before deploying:
-
-- Add server-side ownership checks for student logs and logbooks.
-- Rotate the JWT secret and database credentials if `.env` values have been exposed.
+- The frontend still uses `localStorage` for authentication; tokens and users are browser-visible.
+- The project does not yet have migrations or seed scripts; schema setup remains manual.
+- Automated frontend and backend test suites are still needed.
+- Demo/legacy files such as `src/app/App.jsx`, `src/utils/data.js`, and `ApproveModal.jsx` remain present.
+- Before production, rotate exposed secrets and database credentials, move static API URLs to environment configuration, and add rate limiting.
 - Use secure HTTP-only cookies or a more robust token-storage strategy.
 - Add supervisor restrictions consistently to every admin-only route.
 - Centralize API configuration and allow deployment URLs.

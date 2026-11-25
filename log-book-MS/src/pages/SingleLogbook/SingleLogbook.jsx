@@ -175,9 +175,9 @@ function SingleLogbook() {
         </button>
         <button
           className="generate-button"
-          disabled={logbook.is_approved === null ? true : false}
+          disabled={!logbook.is_approved}
           style={{
-            cursor: logbook.is_approved === null ? "not-allowed" : "pointer",
+            cursor: logbook.is_approved ? "pointer" : "not-allowed",
           }}
           onClick={generatePDF}
         >

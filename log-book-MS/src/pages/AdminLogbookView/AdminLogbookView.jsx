@@ -70,7 +70,7 @@ function AdminLogbookView() {
     toast.success("Logbook approved successfully");
 
     setTimeout(() => {
-      naviagte("/dashboard/logbooks");
+      naviagte("/admin/logbooks");
     }, 3000);
   };
 

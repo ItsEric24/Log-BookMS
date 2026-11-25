@@ -1,32 +1,32 @@
 /* Document Container */
 .logbook-document {
-  width: 900px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
-  color: #2c3e50;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #eeefed;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px rgba(28, 35, 32, 0.035);
+  color: #41434a;
 }
 
 /* Header */
 .logbook-header {
   text-align: center;
   margin-bottom: 20px;
-  border-bottom: 2px solid #ecf0f1;
+  border-bottom: 1px solid #eeefed;
   padding-bottom: 10px;
 }
 
 .logbook-header h1 {
   font-size: 24px;
-  color: #3498db; /* Blue */
+  color: #33896f;
 }
 
 .logbook-header p {
   font-size: 14px;
-  color: #34495e; /* Dark gray */
+  color: #73767e;
   margin: 5px 0;
 }
 
@@ -38,7 +38,7 @@
 .daily-logs h2 {
   font-size: 18px;
   margin-bottom: 15px;
-  color: #2c3e50;
+  color: #33343a;
   border-bottom: 1px solid #ecf0f1;
   padding-bottom: 5px;
 }
@@ -46,65 +46,65 @@
 .daily-log {
   margin-bottom: 20px;
   padding: 15px;
-  border: 1px solid #ecf0f1;
-  border-radius: 5px;
-  background-color: #f9f9f9;
+  border: 1px solid #eeefed;
+  border-radius: 10px;
+  background-color: #fafbfa;
 }
 
 .daily-log h3 {
   font-size: 16px;
-  color: #2c3e50;
+  color: #33343a;
   margin-bottom: 10px;
 }
 
 .daily-log p {
   font-size: 14px;
-  color: #34495e;
+  color: #55575e;
   margin: 5px 0;
 }
 
 /* Weekly Summary Section */
 .weekly-summary {
   margin-top: 30px;
-  border-top: 2px solid #ecf0f1;
+  border-top: 1px solid #eeefed;
   padding-top: 15px;
 }
 
 .weekly-summary h2 {
   font-size: 18px;
-  color: #2c3e50;
+  color: #33343a;
   margin-bottom: 10px;
 }
 
 .weekly-summary p {
   font-size: 14px;
-  color: #34495e;
+  color: #55575e;
   line-height: 1.6;
 }
 
 /* Footer */
 .logbook-footer {
   margin-top: 20px;
-  border-top: 2px solid #ecf0f1;
+  border-top: 1px solid #eeefed;
   padding-top: 10px;
 }
 
 .logbook-footer p {
   font-size: 14px;
-  color: #7f8c8d;
+  color: #858890;
   margin: 5px 0;
 }
 
 .logbook-footer strong {
-  color: #2c3e50;
+  color: #33343a;
 }
 
-.logbook-action-buttons{
-  margin-top: 50px;
+.logbook-action-buttons {
+  margin-top: 28px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-top: 2px solid #ecf0f1;
+  border-top: 1px solid #eeefed;
   padding-top: 10px;
 }
 
@@ -127,7 +127,7 @@
 }
 
 .logbook-action-buttons .generate-button {  
-  background-color: #3498db;
+  background-color: #33896f;
   color: white;
   border: none;
   padding: 8px 16px;
@@ -136,14 +136,25 @@
 }
 
 .logbook-action-buttons .generate-button:hover {
-  background-color: #2980b9;
+  background-color: #26765e;
 }
 
 .notice {
   margin-top: 50px;
   padding: 10px;
   background-color: #f9f9f9;
-  border: 1px solid #ecf0f1;
+  border: 1px solid #eeefed;
   border-radius: 5px;
   color: #2c3e50;
+}
+
+@media (max-width: 700px) {
+  .logbook-document {
+    padding: 18px;
+  }
+
+  .logbook-action-buttons {
+    gap: 12px;
+    flex-wrap: wrap;
+  }
 }

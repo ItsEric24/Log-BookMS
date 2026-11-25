@@ -1,14 +1,14 @@
 /* Container */
 .log-document-container {
-  width: 900px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: white;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
-  color: #2c3e50;
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #eeefed;
+  border-radius: 16px;
+  box-shadow: 0 5px 18px rgba(28, 35, 32, 0.035);
+  color: #41434a;
 }
 
 /* Header Section */
@@ -21,12 +21,12 @@
 
 .log-header h1 {
   font-size: 24px;
-  color: #3498db; /* Blue */
+  color: #33896f;
 }
 
 .log-header p {
   font-size: 14px;
-  color: #34495e; /* Dark gray */
+  color: #73767e;
   margin: 5px 0;
 }
 
@@ -38,14 +38,14 @@
 .log-details h2 {
   font-size: 18px;
   margin-bottom: 10px;
-  color: #2c3e50;
+  color: #33343a;
   border-bottom: 1px solid #ecf0f1;
   padding-bottom: 5px;
 }
 
 .log-details p {
   font-size: 14px;
-  color: #34495e;
+  color: #55575e;
   line-height: 1.6;
 }
 
@@ -73,7 +73,7 @@
 }
 
 .log-actions .update-button {
-  background-color: #3498db; /* Blue */
+  background-color: #33896f;
   color: white;
   font-size: 16px;
   border: none;
@@ -84,5 +84,11 @@
 }
 
 .log-actions .update-button:hover {
-  background-color: #2980b9; /* Darker blue on hover */    
+  background-color: #26765e;
+}
+
+@media (max-width: 700px) {
+  .log-document-container {
+    padding: 18px;
+  }
 }

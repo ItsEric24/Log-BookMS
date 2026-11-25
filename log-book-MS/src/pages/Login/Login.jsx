@@ -9,14 +9,14 @@ function Login() {
   const [password, setPassword] = useState("");
   const [department, setDepartment] = useState("");
   const [school, setSchool] = useState("");
-  const { login, loginLoading, token } = useAppContext();
+  const { login, loginLoading, token, user } = useAppContext();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
-      navigate("/dashboard");
+      navigate(user?.role === "supervisor" ? "/admin" : "/dashboard");
     }
-  }, [navigate, token]);
+  }, [navigate, token, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -26,12 +26,12 @@ function Login() {
     }
 
     try {
-      await login({ email, password, department, school });
+      const loggedInUser = await login({ email, password, department, school });
       toast.success(
         "Login successful, you will be redirected to the dashboard shortly"
       );
       setTimeout(() => {
-        navigate("/dashboard");
+        navigate(loggedInUser.role === "supervisor" ? "/admin" : "/dashboard");
       }, 3000);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Login failed. Please try again.");
@@ -41,6 +41,7 @@ function Login() {
     setEmail("");
     setPassword("");
     setDepartment("");
+    setSchool("");
   };
 
   return (

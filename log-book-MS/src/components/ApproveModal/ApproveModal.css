@@ -53,8 +53,8 @@
   color: #333;
 }
 
-textarea,
-input {
+.approve-modal-container textarea,
+.approve-modal-container input {
   width: 100%;
   padding: 10px;
   margin-top: 5px;
@@ -63,7 +63,7 @@ input {
   font-size: 0.875rem;
 }
 
-textarea {
+.approve-modal-container textarea {
   height: 150px;
   margin-bottom: 20px;
 }

@@ -8,11 +8,11 @@ const { isValidUUID } = require("../../utils/helperFunctions");
 
 //* add a new daily_log to the database
 dailyLogRouter.post("/add", authenticateUser, async (req, res) => {
-  const { studentId, day, date, weekNumber, description, skillsLearnt } =
+  const { day, date, weekNumber, description, skillsLearnt } =
     req.body;
+  const studentId = req.user.id;
 
   if (
-    !studentId ||
     !day ||
     !date ||
     !weekNumber ||
@@ -23,16 +23,16 @@ dailyLogRouter.post("/add", authenticateUser, async (req, res) => {
   }
 
   //* If weekNumber, day, date and studentId already exists, return an error
-  const log = await db.query(
-    "SELECT * FROM daily_logs WHERE week_number = $1 AND day = $2 AND date = $3 AND student_id = $4",
-    [weekNumber, day, date, studentId]
-  );
-  if (log.rows.length > 0) {
-    return res.status(400).json({ message: "Log already exists" });
-  }
-
   try {
-    db.query(
+    const log = await db.query(
+      "SELECT id FROM daily_logs WHERE week_number = $1 AND day = $2 AND date = $3 AND student_id = $4",
+      [weekNumber, day, date, studentId]
+    );
+    if (log.rows.length > 0) {
+      return res.status(409).json({ message: "Log already exists" });
+    }
+
+    await db.query(
       "INSERT INTO daily_logs (student_id, day, date, week_number, description_of_work, skills_learnt) VALUES ($1, $2, $3, $4, $5, $6)",
       [studentId, day, date, weekNumber, description, skillsLearnt]
     );
@@ -49,6 +49,9 @@ dailyLogRouter.get("/:id", authenticateUser, async (req, res) => {
   if (!isValidUUID(id)) {
     return res.status(400).json({ message: "Invalid ID" });
   }
+  if (req.user.role !== "supervisor" && req.user.id !== id) {
+    return res.status(403).json({ message: "Access Denied" });
+  }
 
   try {
     const dailyLogs = await db.query(
@@ -59,7 +62,8 @@ dailyLogRouter.get("/:id", authenticateUser, async (req, res) => {
       data: dailyLogs.rows,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
@@ -72,9 +76,14 @@ dailyLogRouter.get("/daily-log/:id", authenticateUser, async (req, res) => {
   }
 
   try {
-    const dailyLog = await db.query("SELECT * FROM daily_logs WHERE id = $1", [
-      id,
-    ]);
+    const ownership = req.user.role === "supervisor"
+      ? "WHERE id = $1"
+      : "WHERE id = $1 AND student_id = $2";
+    const params = req.user.role === "supervisor" ? [id] : [id, req.user.id];
+    const dailyLog = await db.query(`SELECT * FROM daily_logs ${ownership}`, params);
+    if (dailyLog.rows.length === 0) {
+      return res.status(404).json({ message: "Daily log not found" });
+    }
     res.status(200).json({
       data: dailyLog.rows,
     });
@@ -88,29 +97,54 @@ dailyLogRouter.put("/:id", authenticateUser, async (req, res) => {
   const id = req.params.id;
   const { day, date, weekNumber, description, skillsLearnt } = req.body;
 
+  if (!isValidUUID(id)) {
+    return res.status(400).json({ message: "Invalid ID" });
+  }
+
   if (!day || !date || !weekNumber || !description || !skillsLearnt) {
     return res.status(400).json({ message: "Please fill in all fields" });
   }
 
   try {
-    db.query(
-      "UPDATE daily_logs SET  day = $1, date = $2, week_number = $3, description_of_work = $4, skills_learnt = $5 WHERE id = $6",
-      [day, date, weekNumber, description, skillsLearnt, id]
+    const ownership = req.user.role === "supervisor"
+      ? "id = $6"
+      : "id = $6 AND student_id = $7";
+    const params = req.user.role === "supervisor"
+      ? [day, date, weekNumber, description, skillsLearnt, id]
+      : [day, date, weekNumber, description, skillsLearnt, id, req.user.id];
+    const result = await db.query(
+      `UPDATE daily_logs SET day = $1, date = $2, week_number = $3, description_of_work = $4, skills_learnt = $5 WHERE ${ownership}`,
+      params
     );
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Daily log not found" });
+    }
     res.status(200).json({ message: "Daily log updated successfully" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
 //* Delete a particular daily_log from the database by id
 dailyLogRouter.delete("/:id", authenticateUser, async (req, res) => {
   const id = req.params.id;
+  if (!isValidUUID(id)) {
+    return res.status(400).json({ message: "Invalid ID" });
+  }
   try {
-    db.query("DELETE FROM daily_logs WHERE id = $1", [id]);
+    const ownership = req.user.role === "supervisor"
+      ? "WHERE id = $1"
+      : "WHERE id = $1 AND student_id = $2";
+    const params = req.user.role === "supervisor" ? [id] : [id, req.user.id];
+    const result = await db.query(`DELETE FROM daily_logs ${ownership}`, params);
+    if (result.rowCount === 0) {
+      return res.status(404).json({ message: "Daily log not found" });
+    }
     res.status(200).json({ message: "Daily log deleted successfully" });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({ message: "Internal Server Error" });
   }
 });
 

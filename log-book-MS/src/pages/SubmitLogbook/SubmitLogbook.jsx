@@ -57,8 +57,6 @@ LogBookMS`;
     if (response.ok) {
       toast.success("Weekly log submitted successfully");
       sendEmail(
-        "eddiesolentai@gmail.com",
-        "eddymunene12@gmail.com",
         "LogBookSubmission",
         logBookEmailMessage,
         token
@@ -92,7 +90,7 @@ LogBookMS`;
       <div className="daily-logs-list">
         <h2>Daily Logs for Week {weekNumber}</h2>
         {dailyLogs
-          .filter((log) => Number(log.week_number) === weekNumber) // Filter logs for the selected week
+          .filter((log) => Number(log.week_number) === weekNumber)
           .map((log) => (
             <div key={log.id} className="daily-log-item">
               <p>
@@ -108,7 +106,7 @@ LogBookMS`;
           ))}
         {dailyLogs.filter((log) => Number(log.week_number) === weekNumber)
           .length === 0 && (
-          <p style={{ color: "#ffffff", textAlign: "center" }}>
+          <p className="empty-state">
             No Logs for week {weekNumber}
           </p>
         )}
@@ -116,7 +114,7 @@ LogBookMS`;
 
       {/* Weekly Summary */}
       <div className="weekly-summary">
-        <h2 style={{ color: "#ffffff"}}>Write Week Summary</h2>
+        <h2>Write Week Summary</h2>
         <textarea
           placeholder="Write your week summary here..."
           value={weekSummary}
