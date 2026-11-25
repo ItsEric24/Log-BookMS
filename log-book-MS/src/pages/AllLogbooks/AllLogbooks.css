@@ -1,43 +1,39 @@
-/* Container Styling */
 .manage-logbooks {
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  overflow: auto;
+  width: 100%;
 }
 
 .manage-logbooks h1 {
-  text-align: center;
-  margin-bottom: 20px;
-  color: #ffffff;
+  margin: 0 0 20px;
+  color: #28292f;
+  font-size: 20px;
+  font-weight: 650;
 }
 
-/* Logbook List Styling */
 .logbook-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
 
-/* Individual Logbook Item */
 .logbook-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #ecf0f1;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  background: #fff;
+  padding: 17px 20px;
+  border: 1px solid #eeefed;
+  border-radius: 14px;
+  box-shadow: 0 5px 18px rgba(28, 35, 32, 0.035);
   cursor: pointer;
-  transition: all ease-in-out 0.1s;
-  color: #2c3e50;
+  transition: border-color 160ms ease, transform 160ms ease;
+  color: #41434a;
 }
 
-.logbook-item:hover{
-  background-color: grey;
-  color: white;
+.logbook-item:hover {
+  border-color: #edb78f;
+  transform: translateY(-1px);
 }
 
-/* Logbook Details */
 .logbook-details {
   flex: 1;
 }
@@ -45,6 +41,10 @@
 .logbook-details p {
   margin: 5px 0;
   font-size: 14px;
+}
+
+.logbook-details strong {
+  color: #73767e;
 }
 
 /* Action Buttons */

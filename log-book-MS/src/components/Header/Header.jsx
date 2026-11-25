@@ -4,16 +4,31 @@ import { useAppContext } from "../../app/useAppContext";
 
 function Header() {
   const { user } = useAppContext();
-  const name = user?.role === "supervisor" ? "Admin" : user?.name || "User";
+  const name = user?.name || (user?.role === "supervisor" ? "Admin" : "User");
+  const role = user?.role === "supervisor" ? "Administrator" : "Student";
+
   return (
-    <div className="header">
-      <h1 className="header-title">Welcome, {name}</h1>
+    <header className="header">
+      <div className="header-content">
+        <h1 className="header-title">Dashboard</h1>
+        <p className="header-date">
+          {new Intl.DateTimeFormat("en", {
+            day: "numeric",
+            month: "long",
+            year: "numeric",
+          }).format(new Date())}
+        </p>
+      </div>
       <div className="header-actions">
         <div className="header-profile">
-          <img src={UserIcon} alt="User Avatar" className="header-avatar" />
+          <img src={UserIcon} alt="" className="header-avatar" />
+          <div className="header-profile-copy">
+            <span className="header-profile-name">{name}</span>
+            <span className="header-profile-role">{role}</span>
+          </div>
         </div>
       </div>
-    </div>
+    </header>
   );
 }
 

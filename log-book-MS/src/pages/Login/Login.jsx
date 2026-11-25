@@ -9,38 +9,54 @@ function Login() {
   const [password, setPassword] = useState("");
   const [department, setDepartment] = useState("");
   const [school, setSchool] = useState("");
-  const { login, loginLoading, token } = useAppContext();
+  const { login, loginLoading, token, user } = useAppContext();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
-      navigate("/dashboard");
+      navigate(user?.role === "supervisor" ? "/admin" : "/dashboard");
     }
-  }, [navigate, token]);
+  }, [navigate, token, user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!email || !password || !department || !school) {
-      return toast.error("Please fill in all fields");
+    const formData = new FormData(e.currentTarget);
+    const credentials = {
+      email: String(formData.get("email") || "").trim(),
+      password: String(formData.get("password") || ""),
+      department: String(formData.get("department") || "").trim(),
+      school: String(formData.get("school") || "").trim(),
+    };
+    const fieldLabels = {
+      email: "email",
+      password: "password",
+      department: "department",
+      school: "school",
+    };
+    const missingFields = Object.entries(credentials)
+      .filter(([, value]) => !value)
+      .map(([field]) => fieldLabels[field]);
+
+    if (missingFields.length > 0) {
+      return toast.error(`Please fill in: ${missingFields.join(", ")}`);
     }
 
     try {
-      await login({ email, password, department, school });
+      const loggedInUser = await login(credentials);
       toast.success(
         "Login successful, you will be redirected to the dashboard shortly"
       );
+      setEmail("");
+      setPassword("");
+      setDepartment("");
+      setSchool("");
       setTimeout(() => {
-        navigate("/dashboard");
+        navigate(loggedInUser.role === "supervisor" ? "/admin" : "/dashboard");
       }, 3000);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Login failed. Please try again.");
     }
-
-    // Clear input fields after submission
-    setEmail("");
-    setPassword("");
-    setDepartment("");
   };
 
   return (
@@ -56,6 +72,8 @@ function Login() {
               name="email"
               value={email}
               placeholder="Enter your email"
+              autoComplete="email"
+              required
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
@@ -67,6 +85,8 @@ function Login() {
               name="password"
               value={password}
               placeholder="Enter your password"
+              autoComplete="current-password"
+              required
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
@@ -76,6 +96,7 @@ function Login() {
               id="department"
               name="department"
               value={department}
+              required
               onChange={(e) => setDepartment(e.target.value)}
             >
               <option value="" defaultValue={true}>
@@ -92,6 +113,8 @@ function Login() {
             <select
               id="school"
               name="school"
+              value={school}
+              required
               onChange={(e) => setSchool(e.target.value)}
             >
               <option value="" defaultValue={true}>

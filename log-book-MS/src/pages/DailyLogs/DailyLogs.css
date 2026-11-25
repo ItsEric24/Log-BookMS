@@ -1,79 +1,89 @@
-/* Container Styling */
 .daily-logs-list-container {
   width: 100%;
-  padding: 20px;
-  font-family: Arial, sans-serif;
-  overflow: auto;
 }
 
 .daily-logs-list-container h1 {
-  text-align: center;
-  color: #ffffff;
-  margin-bottom: 20px;
+  color: #28292f;
+  font-size: 20px;
+  font-weight: 650;
+  margin: 0;
 }
 
-/* List Styling */
-.daily-logs-list {
+.daily-logs-list-container .daily-logs-list {
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 12px;
 }
 
-.daily-log-item {
-  padding: 15px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background-color: #ecf0f1; /* Light grey */
-  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  transition: background-color 0.2s ease;
+.daily-logs-list-container .daily-log-item {
+  padding: 17px 20px;
+  border: 1px solid #eeefed;
+  border-radius: 14px;
+  background: #fff;
+  box-shadow: 0 5px 18px rgba(28, 35, 32, 0.035);
+  transition: border-color 160ms ease, transform 160ms ease;
 }
 
-.daily-log-item:hover {
-  background-color: #f9f9f9; /* Slight hover effect */
+.daily-logs-list-container .daily-log-item:hover {
+  border-color: #edb78f;
+  transform: translateY(-1px);
 }
 
-.daily-log-item p {
+.daily-logs-list-container .daily-log-item p {
   margin: 5px 0;
   font-size: 14px;
-  color: #2c3e50;
+  color: #41434a;
 }
 
-.daily-log-item strong {
-  color: #34495e;
+.daily-logs-list-container .daily-log-item strong {
+  color: #73767e;
 }
 
-.daily-logs-header{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+.daily-logs-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
 }
 
 .daily-logs-header label {
-  font-size: 16px;
-  margin-right: 10px;
-  color: #ffffff;
+  font-size: 13px;
+  margin-right: 8px;
+  color: #656871;
 }
 
 .daily-logs-header select {
-  font-size: 14px;
-  padding: 5px;
-  border-radius: 5px;
-  border: 1px solid #ccc;
+  font-size: 13px;
+  padding: 9px 12px;
+  border-radius: 9px;
+  border: 1px solid #e1e2e0;
+  background: #fff;
 }
 
-.daily-logs-btn{
-    padding: 8px 15px;
-    border: none;
-    border-radius: 5px;
-    font-size: 14px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    background-color: #3498db;
-    color: white;
+.daily-logs-btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 160ms ease;
+  background-color: #33896f;
+  color: white;
 }
 
-.daily-logs-btn:hover{
-    background-color: #2980b9;
+.daily-logs-btn:hover {
+  background-color: #26765e;
 }
 
+@media (max-width: 620px) {
+  .daily-logs-header {
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
 
+  .daily-logs-header > div {
+    margin-left: auto;
+  }
+}

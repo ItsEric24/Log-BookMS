@@ -1,9 +1,10 @@
 import "./App.css";
+import { API_URL } from "../utils/api";
 
 function App() {
   const handleDownload = async () => {
     try {
-      const response = await fetch("http://localhost:3000/generate-pdf", {
+      const response = await fetch(`${API_URL}/generate-pdf`, {
         method: "GET",
         headers: {
           Accept: "application/pdf",

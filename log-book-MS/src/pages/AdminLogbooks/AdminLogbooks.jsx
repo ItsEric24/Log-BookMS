@@ -87,7 +87,7 @@ function AdminLogbooks() {
             </div>
           ))
         ) : (
-          <p style={{ color: "#ffffff", textAlign: "center" }}>
+          <p className="empty-state">
             No logbooks at the moment
           </p>
         )}

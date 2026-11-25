@@ -7,6 +7,10 @@ Log-BookMS is a full-stack academic and internship log-book application split in
 1. **`log-book-MS/`** is the React user interface.
 2. **`log-book-MS-backend/`** is the Express and PostgreSQL REST API.
 
+### Motivation
+
+The motivation for this project came from seeing that schools in Kenya still handle logbook processes with physical paper. This project explores how to automate that process with a system that makes logging, reviewing, approving, and managing academic or internship logbooks faster and more accessible.
+
 Students use the system to:
 
 - Register and log in.
@@ -438,7 +442,11 @@ pnpm dev
 
 The UI is available at `http://localhost:3000`.
 
-The frontend currently hard-codes `http://localhost:8000` in API calls, so no frontend environment variable is required for the local setup.
+Create `log-book-MS/.env` from `.env.example` when a local or hosted API URL is needed:
+
+```env
+VITE_API_URL=http://localhost:8000
+```
 
 ### Backend
 
@@ -450,7 +458,7 @@ npm install
 npm start
 ```
 
-`npm start` invokes Nodemon and starts the API on `http://localhost:8000`.
+`npm run dev` invokes Nodemon and starts the API on `http://localhost:8000`. `npm start` runs the production-compatible Node server.
 
 Create `log-book-MS-backend/.env` with:
 
@@ -463,11 +471,48 @@ DB_NAME=logbookMS
 
 JWT_SECRET=<a-long-random-secret>
 
+CORS_ORIGINS=http://localhost:3000
+
 EMAIL=<gmail-address>
 EMAIL_PASSWORD=<gmail-app-password>
+SUPERVISOR_EMAIL=<supervisor-email>
 ```
 
 PostgreSQL must contain the `members`, `daily_logs`, and `logbooks` tables and suitable UUID defaults/foreign keys. Database setup details and reconstruction SQL are documented in `DATABASE_SCHEMA.md`.
+
+### MVP deployment
+
+The repository includes `vercel.json` for the frontend and `render.yaml` for the backend. Neon provides the PostgreSQL database.
+
+#### Frontend on Vercel
+
+1. Import the repository into Vercel.
+2. Set the project root directory to `log-book-MS`.
+3. Set `VITE_API_URL` to the deployed Render API URL, for example `https://log-book-ms-api.onrender.com`.
+4. Deploy. Vercel serves the Vite build and the included rewrite supports React Router routes.
+
+#### Backend on Render
+
+1. Create a Neon project and database. Copy its pooled connection string.
+2. Create a Render Blueprint from the repository root using `render.yaml`.
+3. Set `DATABASE_URL` in Render to the Neon connection string and `CORS_ORIGINS` to the exact Vercel frontend origin, for example `https://your-project.vercel.app`.
+4. Apply the required schema in `log-book-MS-backend/DATABASE_SCHEMA.md` to the Neon database using Neon's SQL Editor. The documented DDL is reconstructed from the application and should be checked against the actual schema before applying it to an existing database.
+5. Set `EMAIL`, `EMAIL_PASSWORD`, and `SUPERVISOR_EMAIL` only if the email feature will be demonstrated.
+
+#### Seed showcase accounts and records
+
+The backend has an opt-in seed command that creates one demo student, one demo supervisor, five daily entries in each of two previous weeks, one approved logbook, and one pending logbook. It uses reserved `.test` email addresses and hashes the passwords.
+
+1. In `log-book-MS-backend/.env`, set `DATABASE_URL` to the Neon connection string and provide `SEED_DEMO_DATA=true`, `DEMO_STUDENT_PASSWORD`, and `DEMO_SUPERVISOR_PASSWORD`. Use separate demo passwords of at least 12 characters. This local `.env` file is git-ignored.
+2. From the backend folder, run:
+
+   ```bash
+   npm run seed:demo
+   ```
+
+3. Log in using `student.demo@logbookms.test` or `supervisor.demo@logbookms.test` and the respective passwords you configured. For both accounts, select **Infrastructure** and **KCA** in the login form.
+
+Re-running the command resets daily logs and logbooks belonging to the reserved demo student and refreshes the demo account passwords. Do not use these reserved demo accounts for real users or seed a database containing real records.
 
 ## Development commands
 
@@ -485,7 +530,8 @@ pnpm preview  # Preview a built bundle
 
 ```bash
 cd log-book-MS-backend
-npm start     # Nodemon development server
+npm run dev   # Nodemon development server
+npm start     # Production-compatible Node server
 npm test      # Placeholder; no test runner is configured
 ```
 
@@ -502,32 +548,28 @@ The backend has no automated test suite and no test script beyond the package-ge
 
 ## Current implementation notes and gaps
 
-These details are useful for maintainers and should not be mistaken for intentional security guarantees:
+The main implementation gaps listed previously have been addressed:
 
-- The frontend uses `localStorage` for authentication; tokens and users are browser-visible.
-- `authenticateUser` assumes an authorization header exists and would otherwise throw before its explicit missing-token check.
-- Login requires a school input, but the backend login query does not use the submitted `school`.
-- Daily and logbook mutations are not awaited in all SQL route handlers, so some success responses may be sent before database operations finish.
-- Some routes validate UUIDs while count and student routes do not.
-- Routes do not consistently verify that a student owns the record they request, update, or delete.
-- The backend has no catch-all 404 or centralized error middleware.
-- The frontend PDF button is disabled only when `logbook.is_approved === null`; because normal pending values are `false`, it can appear enabled for pending records.
-- The approval page redirects to `/dashboard/logbooks` after supervisor approval, although a supervisor should more naturally return to `/admin/logbooks`.
-- The login page automatically redirects any token to `/dashboard`; `/dashboard` then redirects a supervisor to `/admin`.
-- `src/app/App.jsx` is an unused prototype and calls an endpoint not defined by the backend.
-- `src/utils/data.js` and `ApproveModal.jsx` are retained demo/legacy code and are not needed for the active data flow.
-- `src/App.css` is effectively unused; active styles are colocated with each component/page.
-- The email recipient and sender are hard-coded in `SubmitLogbook.jsx` and are not derived from a supervisor record.
-- Rejected-log counts are always rendered as `0`; there is no rejection field or rejection-status API.
-- The project does not have migrations or seed scripts; schema setup is manual.
-- There are no automated frontend or backend tests.
+- Authentication now validates a missing or malformed `Bearer` header safely.
+- Login checks email, password, department, and school together.
+- Registration, login, CRUD, and mutation SQL operations are awaited before success responses.
+- Student and logbook routes enforce owner/staff authorization and validate relevant UUID parameters.
+- The backend has a catch-all API 404 and centralized error middleware.
+- Pending logbooks now disable PDF generation until `is_approved === true`.
+- PDF export is also blocked server-side for unapproved logbooks.
+- Supervisor approval returns to `/admin/logbooks`.
+- Login redirects supervisors and students to their appropriate dashboards.
+- Submission email sender/recipient values now come from `EMAIL` and `SUPERVISOR_EMAIL` environment variables.
+- Duplicate daily logs and duplicate weekly logbooks are rejected.
+- Misleading hard-coded rejected-log cards have been removed because the schema has no rejection status.
 
-## Security guidance before production
+Remaining work:
 
-Before deploying:
-
-- Add server-side ownership checks for student logs and logbooks.
-- Rotate the JWT secret and database credentials if `.env` values have been exposed.
+- The frontend still uses `localStorage` for authentication; tokens and users are browser-visible.
+- The project does not yet have migrations or seed scripts; schema setup remains manual.
+- Automated frontend and backend test suites are still needed.
+- Demo/legacy files such as `src/app/App.jsx`, `src/utils/data.js`, and `ApproveModal.jsx` remain present.
+- Before production, rotate exposed secrets and database credentials, move static API URLs to environment configuration, and add rate limiting.
 - Use secure HTTP-only cookies or a more robust token-storage strategy.
 - Add supervisor restrictions consistently to every admin-only route.
 - Centralize API configuration and allow deployment URLs.

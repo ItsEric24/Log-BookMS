@@ -27,7 +27,9 @@ function Dashboard() {
       <Sidebar />
       <div className="dashboard-main">
         <Header />
-        <Outlet/>
+        <main className="dashboard-content">
+          <Outlet />
+        </main>
       </div>
     </div>
   );

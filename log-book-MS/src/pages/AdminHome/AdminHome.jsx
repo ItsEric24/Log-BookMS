@@ -3,6 +3,12 @@ import StatusCard from "../../components/StatusCard/StatusCard";
 import "./AdminHome.css";
 import Loader from "../../components/Loader/Loader";
 import { useAppContext } from "../../app/useAppContext";
+import { API_URL } from "../../utils/api";
+import {
+  FaCheckCircle,
+  FaFileAlt,
+  FaHourglassHalf,
+} from "react-icons/fa";
 
 function AdminHome() {
   const { token } = useAppContext();
@@ -18,7 +24,7 @@ function AdminHome() {
 
         //* Sum of all logbooks
         const response = await fetch(
-          "http://localhost:8000/api/logbooks/admin/logbooks/total",
+          `${API_URL}/api/logbooks/admin/logbooks/total`,
           {
             method: "GET",
             headers: {
@@ -32,7 +38,7 @@ function AdminHome() {
 
         //* Sum of all unapproved logbooks
         const response2 = await fetch(
-          "http://localhost:8000/api/logbooks/admin/logbooks/unapproved",
+          `${API_URL}/api/logbooks/admin/logbooks/unapproved`,
           {
             method: "GET",
             headers: {
@@ -46,7 +52,7 @@ function AdminHome() {
 
         //* Sum of all approved logbooks
         const response3 = await fetch(
-          "http://localhost:8000/api/logbooks/admin/logbooks/approved",
+          `${API_URL}/api/logbooks/admin/logbooks/approved`,
           {
             method: "GET",
             headers: {
@@ -69,10 +75,9 @@ function AdminHome() {
 
   return (
     <div className="admin-main-content">
-      <StatusCard title="Total Submissions" value={loading ? <Loader /> : sumOfLogbooks} icon="📄" />
-      <StatusCard title="Pending Reviews" value={loading ? <Loader /> : sumOfUnapprovedLogs} icon="⏳" />
-      <StatusCard title="Approved Logs" value={loading ? <Loader /> : sumOfApprovedLogs} icon="✅" />
-      <StatusCard title="Rejected Logs" value="0" icon="❌" />
+      <StatusCard title="Total Submissions" value={loading ? <Loader /> : sumOfLogbooks} icon={<FaFileAlt />} />
+      <StatusCard title="Pending Reviews" value={loading ? <Loader /> : sumOfUnapprovedLogs} icon={<FaHourglassHalf />} />
+      <StatusCard title="Approved Logs" value={loading ? <Loader /> : sumOfApprovedLogs} icon={<FaCheckCircle />} />
     </div>
   );
 }

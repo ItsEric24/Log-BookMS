@@ -2,6 +2,7 @@ import { Link } from "react-router";
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "../Auth.css";
+import { API_URL } from "../../utils/api";
 
 function SignUp() {
   const [name, setName] = useState("");
@@ -62,7 +63,7 @@ function SignUp() {
     if (!name || !email || !password || !department || !school) {
       return toast.error("Please fill in all fields");
     }
-    const url = "http://localhost:8000/api/users/register";
+    const url = `${API_URL}/api/users/register`;
     const response = await fetch(url, {
       method: "POST",
       headers: {

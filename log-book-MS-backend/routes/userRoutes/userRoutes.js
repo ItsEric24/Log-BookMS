@@ -12,18 +12,14 @@ userRouter.post("/register", async (req, res) => {
     return res.status(400).json({ message: "Please fill in all fields" });
   }
 
-  const hashedPass = await bcrypt.hash(password, 10);
-
-  //*Check if an email already exists
-  const user = await db.query("SELECT * FROM members WHERE email = $1", [
-    email,
-  ]);
-  if (user.rows.length > 0) {
-    return res.status(400).json({ message: "User already exists" });
-  }
-
   try {
-    db.query(
+    const hashedPass = await bcrypt.hash(password, 10);
+    const existingUser = await db.query("SELECT id FROM members WHERE email = $1", [email]);
+    if (existingUser.rows.length > 0) {
+      return res.status(409).json({ message: "User already exists" });
+    }
+
+    await db.query(
       "INSERT INTO members (name, email, password, department, school) VALUES ($1, $2, $3, $4, $5)",
       [name, email, hashedPass, department, school]
     );
@@ -41,24 +37,13 @@ userRouter.post("/login", async (req, res) => {
     return res.status(400).json({ message: "Please fill in all fields" });
   }
 
-  //*Check if user of the department exists
-  const user = await db.query(
-    "SELECT * FROM members WHERE email = $1 AND department = $2",
-    [email, department]
-  );
-
-  if (user.rows.length === 0) {
-    return res.status(400).json({
-      message: "Invalid credentials. User does not belong to this department",
-    });
-  }
-
   try {
-    const user = await db.query("SELECT * FROM members WHERE email = $1", [
-      email,
-    ]);
+    const user = await db.query(
+      "SELECT * FROM members WHERE email = $1 AND department = $2 AND school = $3",
+      [email, department, school]
+    );
 
-    if (user.rows[0].length === 0) {
+    if (user.rows.length === 0) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
 

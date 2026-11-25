@@ -3,6 +3,7 @@ import "./SubmitLogbook.css";
 import { ToastContainer, toast } from "react-toastify";
 import { sendEmail } from "../../utils/helperFunc";
 import { useAppContext } from "../../app/useAppContext";
+import { API_URL } from "../../utils/api";
 
 function SubmitLogbook() {
   const { dailyLogs, fetchDailyLogs, token, user } = useAppContext();
@@ -45,7 +46,7 @@ LogBookMS`;
       return toast.error("There are no daily logs for this week");
     }
 
-    const response = await fetch("http://localhost:8000/api/logbooks/add", {
+    const response = await fetch(`${API_URL}/api/logbooks/add`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,8 +58,6 @@ LogBookMS`;
     if (response.ok) {
       toast.success("Weekly log submitted successfully");
       sendEmail(
-        "eddiesolentai@gmail.com",
-        "eddymunene12@gmail.com",
         "LogBookSubmission",
         logBookEmailMessage,
         token
@@ -92,7 +91,7 @@ LogBookMS`;
       <div className="daily-logs-list">
         <h2>Daily Logs for Week {weekNumber}</h2>
         {dailyLogs
-          .filter((log) => Number(log.week_number) === weekNumber) // Filter logs for the selected week
+          .filter((log) => Number(log.week_number) === weekNumber)
           .map((log) => (
             <div key={log.id} className="daily-log-item">
               <p>
@@ -108,7 +107,7 @@ LogBookMS`;
           ))}
         {dailyLogs.filter((log) => Number(log.week_number) === weekNumber)
           .length === 0 && (
-          <p style={{ color: "#ffffff", textAlign: "center" }}>
+          <p className="empty-state">
             No Logs for week {weekNumber}
           </p>
         )}
@@ -116,7 +115,7 @@ LogBookMS`;
 
       {/* Weekly Summary */}
       <div className="weekly-summary">
-        <h2 style={{ color: "#ffffff"}}>Write Week Summary</h2>
+        <h2>Write Week Summary</h2>
         <textarea
           placeholder="Write your week summary here..."
           value={weekSummary}

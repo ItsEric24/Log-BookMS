@@ -143,6 +143,9 @@ const DailyModal = ({ isOpen, onClose, onSave, initialData }) => {
               name="description"
               value={formData.description}
               onChange={handleChange}
+              cols={60}
+              rows={10}
+              placeholder="Enter description of work..."
               required
             ></textarea>
             {formErrors.description && (
@@ -156,6 +159,9 @@ const DailyModal = ({ isOpen, onClose, onSave, initialData }) => {
               name="skillsLearnt"
               value={formData.skillsLearnt}
               onChange={handleChange}
+              cols={60}
+              rows={10}
+              placeholder="Enter skills learnt..."
               required
             ></textarea>
             {formErrors.skillsLearnt && (

@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: log-book-ms-api
+    runtime: node
+    rootDir: log-book-MS-backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: JWT_SECRET
+        generateValue: true
+      - key: DATABASE_URL
+        sync: false
+      - key: CORS_ORIGINS
+        sync: false
+      - key: EMAIL
+        sync: false
+      - key: EMAIL_PASSWORD
+        sync: false
+      - key: SUPERVISOR_EMAIL
+        sync: false

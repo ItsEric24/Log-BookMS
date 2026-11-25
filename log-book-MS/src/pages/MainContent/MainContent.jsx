@@ -3,6 +3,12 @@ import StatusCard from "../../components/StatusCard/StatusCard"
 import { useEffect, useState } from "react";
 import Loader from "../../components/Loader/Loader"
 import { useAppContext } from "../../app/useAppContext";
+import { API_URL } from "../../utils/api";
+import {
+  FaCheckCircle,
+  FaFileAlt,
+  FaHourglassHalf,
+} from "react-icons/fa";
 
 function MainContent() {
   const { token, user } = useAppContext();
@@ -17,7 +23,7 @@ function MainContent() {
       try {
 
         //* Sum all logbooks for a particular student
-        const response = await fetch(`http://localhost:8000/api/logbooks/total/${user.id}`, {
+        const response = await fetch(`${API_URL}/api/logbooks/total/${user.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -26,7 +32,7 @@ function MainContent() {
         setLogbookSum(data.data[0].count);
 
         //* Sum all approved logbooks for a particular student
-        const response2 = await fetch(`http://localhost:8000/api/logbooks/approved/${user.id}`, {
+        const response2 = await fetch(`${API_URL}/api/logbooks/approved/${user.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -35,7 +41,7 @@ function MainContent() {
         setApprovedLogbookSum(data2.data[0].count);
 
         //* Sum all unapproved logbooks for a particular student
-        const response3 = await fetch(`http://localhost:8000/api/logbooks/unapproved/${user.id}`, {
+        const response3 = await fetch(`${API_URL}/api/logbooks/unapproved/${user.id}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -55,10 +61,9 @@ function MainContent() {
 
   return (
     <div className="main-content">
-        <StatusCard title="Total Submissions" value={loading ? <Loader /> : logbookSum} icon="📄" />
-        <StatusCard title="Pending Reviews" value={loading ? <Loader /> : unapprovedLogbookSum} icon="⏳" />
-        <StatusCard title="Approved Logs" value={loading ? <Loader /> : approvedLogbookSum} icon="✅" />
-        <StatusCard title="Rejected Logs" value="0" icon="❌" />
+        <StatusCard title="Total Submissions" value={loading ? <Loader /> : logbookSum} icon={<FaFileAlt />} />
+        <StatusCard title="Pending Reviews" value={loading ? <Loader /> : unapprovedLogbookSum} icon={<FaHourglassHalf />} />
+        <StatusCard title="Approved Logs" value={loading ? <Loader /> : approvedLogbookSum} icon={<FaCheckCircle />} />
     </div>
   );
 }

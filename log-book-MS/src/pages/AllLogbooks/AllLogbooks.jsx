@@ -57,7 +57,7 @@ function AllLogbooks() {
             </div>
           ))
         ) : (
-          <p style={{ color: "#ffffff", textAlign: "center" }}>
+          <p className="empty-state">
             No logbooks at the moment, you can create one at the &apos;submit
             logbook section&apos;
           </p>

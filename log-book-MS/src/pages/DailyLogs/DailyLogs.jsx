@@ -6,6 +6,7 @@ import { useEffect } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import Loader from "../../components/Loader/Loader";
 import { useAppContext } from "../../app/useAppContext";
+import { API_URL } from "../../utils/api";
 
 function DailyLogs() {
   const navigate = useNavigate();
@@ -26,7 +27,7 @@ function DailyLogs() {
 
   async function handleSave(formData) {
     try {
-      const response = await fetch("http://localhost:8000/api/daily-logs/add", {
+      const response = await fetch(`${API_URL}/api/daily-logs/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -101,12 +102,12 @@ function DailyLogs() {
                 </div>
               ))
           ) : (
-            <p style={{ color: "#ffffff", textAlign: "center" }}>
+            <p className="empty-state">
               No logs for this week
             </p>
           )
         ) : (
-          <p style={{ color: "#ffffff", textAlign: "center" }}>
+          <p className="empty-state">
             No daily logs available, create one to get started.
           </p>
         )}
